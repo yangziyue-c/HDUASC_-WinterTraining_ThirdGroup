@@ -55,7 +55,7 @@ void Follow_Route(void)
                    SoundLight_On();              //鸣笛并闪灯
                    flag_FollowRoute = 3;
                    cnt2 = 0;
-				   yaw_target = yaw + 180;
+				   yaw_target = yaw_target - 180;
                }
            }
            else   cnt2 = 0;
