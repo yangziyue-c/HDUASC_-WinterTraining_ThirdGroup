@@ -7,12 +7,11 @@
 typedef struct {
     float left_speed;      	// 左轮速度值
     float right_speed;     	// 右轮速度值
-    float yaw;                // 偏航角
 } PathPoint_t;
 
 // 路径记录结构
 typedef struct {
-    PathPoint_t points[3000];   // 最大记录2000个点
+    PathPoint_t points[3000];   // 最大记录3000个点
     uint16_t count;             // 当前路径点数
     uint16_t current_index;     // 当前复现索引
 } PathManager_t;

@@ -143,7 +143,7 @@ void Trace_Tweak(void)
 	TracePID.Ki = parameter[5][1];
 	TracePID.Kd = parameter[5][2];
 	
-	TracePID.Actual = -error;
+	TracePID.Actual = -Sensor_Error;
 	PID_Update(&TracePID);
 	TurnPID.Target = TracePID.Out;
 }

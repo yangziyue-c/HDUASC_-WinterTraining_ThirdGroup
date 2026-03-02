@@ -1,11 +1,8 @@
 #include "path_recorder.h"
 #include "pid.h"
-#include "mpu6050.h"
 #include "Encoder.h"
-#include <string.h>
-#include <math.h>
 
-extern uint8 Recorder_Flag, Tracking_Flag;
+extern uint8 Recorder_Flag, Tracking_Flag, flag1;
 PathManager_t path_manager;
 float Navigation_Speed, Navigation_Turn;
 
@@ -23,7 +20,6 @@ void Record_PathPoint(void)
 
 	p->left_speed = LeftSpeed;
 	p->right_speed = RightSpeed;		
-	p->yaw = yaw;
 	path_manager.count++;
 }
 
@@ -39,19 +35,14 @@ void Navigation_Calculate(void)
 		Navigation_Speed = (target->left_speed + target->right_speed) / 2.0f;
 		
 		// 计算转向控制量
-		Navigation_Turn = 2 *(target->left_speed - target->right_speed);     
+		Navigation_Turn = (target->left_speed - target->right_speed);     
 		
 		// 检查是否到达目标点
 		path_manager.current_index++;					
 		if(path_manager.current_index >= path_manager.count)
 		{
-				Navigation_Speed=0;
-				Navigation_Turn=0;
-				PID_Init(&GyroPID);				
-				PID_Init(&AnglePID);
-				PID_Init(&SpeedPID);
-				PID_Init(&TurnPID);
 				Tracking_Flag=0;
+				flag1=1;
 		}
 	}
 }

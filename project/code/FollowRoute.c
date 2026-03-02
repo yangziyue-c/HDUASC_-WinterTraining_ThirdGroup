@@ -1,22 +1,23 @@
 #include "FollowRoute.h"
 #include "pid.h"
-#include "mpu6050.h"
 #include "sensor.h"
-#include "Motor.h"
 #include "SoundLight.h"
 #include "menu.h"
 
-
+extern uint8 Mode, RunFlag, flag2;
+extern float yaw;
 
 int flag_FollowRoute = 1;                                  //flag状态位：0-暂停；1-AB；2-BC；3-CD；4-DA；
 float yaw_target = 0;
 uint8_t flag_round = 0;                                    //圈数标志位
 
+
+/*根据循线检测更新任务状态*/
 void Follow_Route(void)
 {
    
 
-    stat1 = gpio_get_level(SenSor1);
+  stat1 = gpio_get_level(SenSor1);
 	stat2 = gpio_get_level(SenSor2);
 	stat3 = gpio_get_level(SenSor3);
 	stat4 = gpio_get_level(SenSor4);
@@ -24,7 +25,7 @@ void Follow_Route(void)
    /* 模式二 */
    if(Mode == 2)
    {
-       static int cnt2 = 0;
+     static int cnt2 = 0;
 	   if (RunFlag == 0)
 	   {
 			yaw_target = yaw;
@@ -178,119 +179,56 @@ void Follow_Route(void)
 
    }
 
-
 }
 
 
 
 
 
-
-void Control5ms(void)
-{
-    //速度环PID	
-    Speed_Tweak();
-        
-    if(Mode == 2 || Mode == 3)
-    {
-        flag2 = 1;
-        //循迹环PID
-        if(flag_FollowRoute == 1)
-        {
-            SpeedPID.Target = 0.40;
-//            TurnPID.Target = 0;
-			YAWPID.Target = yaw_target;
-            YAW_Tweak();
-        }
-
-        else if(flag_FollowRoute == 2)
-        {
-            SpeedPID.Target = 0.40;
-            //循迹环PID,相当于TurnPID.Target = TracePID.Out
-            Trace_Tweak();
-        }
-
-        else if(flag_FollowRoute == 3)
-        {
-            SpeedPID.Target = 0.40;
-//            TurnPID.Target = 0;
-			YAWPID.Target = yaw_target;
-            YAW_Tweak();   
-        }
-        else if(flag_FollowRoute == 4)
-        {
-            SpeedPID.Target = 0.40;
-            //循迹环PID,相当于TurnPID.Target = TracePID.Out
-            Trace_Tweak();
-        }
-		else if(flag_FollowRoute == 0)
-        {
-			RunFlag = 0;
-        }
-    }
-
-    else if (flag2 == 1)
-    {
-        flag2=0;
-        TurnPID.Target =0 ;
-    }
-    
-
-
-
-
-
-    if(Mode!=4 || Recorder_Flag!=1)
-    {
-        //转向环PID	
-        Turn_Tweak();			
-    }
-}
-
-
-
-
-
-
-void Control1ms(void)
-{
-
-	//姿态解算
-	Calculate_Attitude();
-
-
-	//角度环PID
-	Angle_Tweak();
-	
-	//角速度环PID	
-	Gyro_Tweak();
-
-	//应用最终输出于电机
-	if (RunFlag)
-	{	
-        LeftPWM = AvePWM + DifPWM / 2;
-        RightPWM = AvePWM - DifPWM / 2;
-        
-        if (LeftPWM > 10000) {LeftPWM = 10000;}
-        else if (LeftPWM < -10000) {LeftPWM = -10000;}
-        if (RightPWM > 10000) {RightPWM = 10000;} 
-        else if (RightPWM < -10000) {RightPWM = -10000;}
-        
-        Set_Motor1(LeftPWM);
-        Set_Motor2(RightPWM);
-	}
-	else
+/*根据任务状态使用循迹PID与定yaw角PID*/
+void Follow_Route_Tweak(void)
+{        
+	if(Mode == 2 || Mode == 3)
 	{
-		Set_Motor1(0);
-		Set_Motor2(0);
+		flag2 = 1;
+		//循迹环PID
+		if(flag_FollowRoute == 1)
+		{
+			SpeedPID.Target = 0.40;
+//    TurnPID.Target = 0;
+			YAWPID.Target = yaw_target;
+			YAW_Tweak();
+		}
+
+		else if(flag_FollowRoute == 2)
+		{
+			SpeedPID.Target = 0.40;
+			//循迹环PID
+			Trace_Tweak();
+		}
+
+		else if(flag_FollowRoute == 3)
+		{
+			SpeedPID.Target = 0.40;
+//    TurnPID.Target = 0;
+			YAWPID.Target = yaw_target;
+			YAW_Tweak();   
+		}
+		else if(flag_FollowRoute == 4)
+		{
+			SpeedPID.Target = 0.40;
+			//循迹环PID
+			Trace_Tweak();
+		}
+		else if(flag_FollowRoute == 0)
+		{
+			RunFlag = 0;
+		}
 	}
+    else if (flag2)
+    {
+			flag2=0;
+			TurnPID.Target =0 ;
+    }
+		
 }
-
-
-
-
-
-
- 
-
-
