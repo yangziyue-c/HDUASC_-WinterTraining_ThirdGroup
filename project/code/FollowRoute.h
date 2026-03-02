@@ -13,6 +13,8 @@ extern float yaw;
 extern int flag_FollowRoute;  
 extern uint8 RunFlag;
 extern float yaw_target;
+extern uint8_t flag_round; 
+
 
 void Follow_Route(void);
 void Control5ms(void);

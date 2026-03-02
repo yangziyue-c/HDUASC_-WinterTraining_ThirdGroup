@@ -33,17 +33,26 @@ int8 Sensor_Check (void)
 	
 	if( !stat1 && stat2 && !stat3 && !stat4) { /* 0 1 0 0 */
 		error = -1;
-	} else if(stat1 && stat2 && !stat3 && !stat4) { /* 1 1 0 0 */
+	}
+	else if(stat1 && stat2 && !stat3 && !stat4) { /* 1 1 0 0 */
 		error = -2;
-	} else if(stat1 && !stat2 && !stat3 && !stat4) { /* 1 0 0 0 */
+	} 
+	else if(stat1 && !stat2 && !stat3 && !stat4) { /* 1 0 0 0 */
 		error = -6;
-	} else if(!stat1 && !stat2 && stat3 && !stat4) { /* 0 0 1 0 */
+	} 
+	else if(!stat1 && !stat2 && stat3 && !stat4) { /* 0 0 1 0 */
 		error = 1;
-	} else if(!stat1 && !stat2 && stat3 && stat4) { /* 0 0 1 1 */
+	} 
+	else if(!stat1 && !stat2 && stat3 && stat4) { /* 0 0 1 1 */
 		error = 2;
-	} else if(!stat1 && !stat2 && !stat3 && stat4) { /* 0 0 0 1 */
+	} 
+	else if(!stat1 && !stat2 && !stat3 && stat4) { /* 0 0 0 1 */
 		error = 6;
-	} else{
+	}
+	else if(!stat1 && !stat2 && !stat3 && !stat4) { /* 0 0 0 0 */
+		error = error;
+	}
+	else{
     error = 0;
   }
 	return error;

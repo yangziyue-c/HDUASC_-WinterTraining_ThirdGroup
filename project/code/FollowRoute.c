@@ -10,7 +10,7 @@
 
 int flag_FollowRoute = 1;                                  //flag状态位：0-暂停；1-AB；2-BC；3-CD；4-DA；
 float yaw_target = 0;
-
+uint8_t flag_round = 0;                                    //圈数标志位
 
 void Follow_Route(void)
 {
@@ -99,71 +99,82 @@ void Follow_Route(void)
    /* 模式三 */
    else if(Mode == 3)
    {
-       flag_FollowRoute = 1;
-       for (int i = 0; i < 4; i++)        //循环绕四圈
-       {
-           static int cnt3 = 0;
-           /* C点判定 */
-           if(flag_FollowRoute == 1)
-           {
-               if(stat1 || stat2 || stat3 || stat4)        //任一点检测到黑线
-               {
-                   cnt3++;
-                   if(cnt3 > 5)               //检测到黑线持续5次
-                   {
-                       SoundLight_On();              //鸣笛并闪灯
-                       flag_FollowRoute = 2;               //进入下一状态
-                       cnt3 = 0;
-                   }
-               }
-               else   cnt3 = 0;
-           }
+		if (RunFlag == 0)
+	   {
+			yaw_target = yaw - 40;
+			flag_round = 0;    //圈数标志位
+	   }
+        static int cnt3 = 0;
+        
+        /* C点判定 */
+        if(flag_FollowRoute == 1)
+        {
+            if(stat1 || stat2 || stat3 || stat4)        //任一点检测到黑线
+            {
+                cnt3++;
+                if(cnt3 > 10)               //检测到黑线持续5次
+                {
+                    SoundLight_On();              //鸣笛并闪灯
+                    flag_FollowRoute = 2;               //进入下一状态
+                    cnt3 = 0;
+                }
+            }
+            else   cnt3 = 0;
+        }
+    
+        /* B点判定 */
+        else if(flag_FollowRoute == 2)
+        {
+            if(!(stat1 || stat2 || stat3 || stat4))              //所有点检测到白线
+            {
+                cnt3++;
+                if(cnt3 > 50)                             //检测到白线持续50次（避免车在C点冲出去检测不到黑线）
+                {
+                    SoundLight_On();              //鸣笛并闪灯
+                    flag_FollowRoute = 3;
+                    cnt3 = 0;
+                    yaw_target = yaw_target + 258;
+                }
+            }
+        }
+    
+        /* D点判定 */
+        else if(flag_FollowRoute == 3)
+        {
+            if(stat1 || stat2 || stat3 || stat4)        //任一点检测到黑线
+            {
+                cnt3++;
+                if(cnt3 > 10)                      //检测到黑线持续5次
+                {
+                    SoundLight_On();              //鸣笛并闪灯
+                    flag_FollowRoute = 4;
+                    cnt3 = 0;
+                }
+            }
+        }
+    
+        /* A点判定 */
+        else if(flag_FollowRoute == 4)
+        {
+            if(!(stat1 || stat2 || stat3 || stat4))             //所有点检测到白线
+            {
+                cnt3++;
+                if(cnt3 > 50)                      //检测到白线持续50次
+                {
+                    SoundLight_On();              //鸣笛并闪灯
+                    flag_FollowRoute = 1;                     //下一次循环
+                    cnt3 = 0;
+                    yaw_target = yaw_target - 258;
+                    flag_round = flag_round + 1;       //第一圈结束
+                    if(flag_round >= 4) 
+                    {
+                        flag_round = 0;                   //第四圈结束
+                        flag_FollowRoute = 0;                      //停止运行
+                    }
+                }
+            }
+        }
        
-           /* B点判定 */
-           else if(flag_FollowRoute == 2)
-           {
-               if(!(stat1 || stat2 || stat3 || stat4))              //所有点检测到白线
-               {
-                   cnt3++;
-                   if(cnt3 > 5)                             //检测到白线持续5次
-                   {
-                       SoundLight_On();              //鸣笛并闪灯
-                       flag_FollowRoute = 3;
-                       cnt3 = 0;
-                   }
-               }
-           }
-       
-           /* D点判定 */
-           else if(flag_FollowRoute == 3)
-           {
-               if(stat1 || stat2 || stat3 || stat4)        //任一点检测到黑线
-               {
-                   cnt3++;
-                   if(cnt3 > 5)                      //检测到黑线持续5次
-                   {
-                       SoundLight_On();              //鸣笛并闪灯
-                       flag_FollowRoute = 4;
-                       cnt3 = 0;
-                   }
-               }
-           }
-       
-           /* A点判定 */
-           else if(flag_FollowRoute == 4)
-           {
-               if(!(stat1 || stat2 || stat3 || stat4))             //所有点检测到白线
-               {
-                   cnt3++;
-                   if(cnt3 > 5)                      //检测到白线持续5次
-                   {
-                       SoundLight_On();              //鸣笛并闪灯
-                       flag_FollowRoute = 0;                     //停止
-                       cnt3 = 0;
-                   }
-               }
-           }
-       }
 
    }
 

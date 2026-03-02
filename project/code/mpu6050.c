@@ -74,10 +74,10 @@ void Calculate_Attitude(void)
 	//yaw
 	yaw += (mpu6050_gyro_transition(mpu6050_gyro_z) * time)-yaw_offset;
 	
-	if(yaw<0){//校准yaw角偏移
-		if(cnt<=1000){				
-			if(cnt==1000){
-			yaw_offset = yaw / 1000.0;
+	if(yaw < 0){//校准yaw角偏移
+		if(cnt<=3000){				
+			if(cnt==3000){
+			yaw_offset = yaw / 3000.0;
 			yaw = 0;
 			}
 			cnt++;
