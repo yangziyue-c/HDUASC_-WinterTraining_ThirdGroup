@@ -118,7 +118,7 @@ void Navigation_Calculate(void)
             if (yaw_error > 30.0f) yaw_error = 30.0f;
             if (yaw_error < -30.0f) yaw_error = -30.0f;
             
-            yaw_correction = YAW_CORRECTION_KP * yaw_error;
+            yaw_correction = -YAW_CORRECTION_KP * yaw_error;
             
             // 限制修正输出
             if (yaw_correction > 0.3f) yaw_correction = 0.3f;
