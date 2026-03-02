@@ -128,7 +128,7 @@ void Follow_Route(void)
             if(!(stat1 || stat2 || stat3 || stat4))              //所有点检测到白线
             {
                 cnt3++;
-                if(cnt3 > 50)                             //检测到白线持续50次（避免车在C点冲出去检测不到黑线）
+                if(cnt3 > 60)                             //检测到白线持续60次（避免车在C点冲出去检测不到黑线）
                 {
                     SoundLight_On();              //鸣笛并闪灯
                     flag_FollowRoute = 3;
@@ -159,7 +159,7 @@ void Follow_Route(void)
             if(!(stat1 || stat2 || stat3 || stat4))             //所有点检测到白线
             {
                 cnt3++;
-                if(cnt3 > 50)                      //检测到白线持续50次
+                if(cnt3 > 60)                      //检测到白线持续50次
                 {
                     SoundLight_On();              //鸣笛并闪灯
                     flag_FollowRoute = 1;                     //下一次循环

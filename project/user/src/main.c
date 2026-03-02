@@ -81,7 +81,7 @@ int main(void)
 //		ips200_show_float(0,144,yaw_offset,4,4);	
 //		BlueSerial_Printf("[plot,%f,%f]", TracePID.Actual, TracePID.Out);
 //		BlueSerial_Printf("[plot,%d]", DifPWM);
-		BlueSerial_Printf("[plot,%d,%d]", flag_FollowRoute, flag_round);
+		BlueSerial_Printf("[plot,%d,%d,%d]", flag_FollowRoute, flag_round, error);
 	}
 }
 
