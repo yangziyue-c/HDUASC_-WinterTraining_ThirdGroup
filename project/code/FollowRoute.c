@@ -67,7 +67,7 @@ void Follow_Route(void)
 			   if(!(stat1 || stat2 || stat3 || stat4))                  //所有点检测到白线
 			   {
 				   cnt2 ++;
-				   if(cnt2 > 10)               //检测到白线持续5次
+				   if(cnt2 > 50)               //检测到白线持续5次
 				   {
 					   SoundLight_On();              //鸣笛并闪灯
 					   flag_FollowRoute = 3;
@@ -116,7 +116,7 @@ void Follow_Route(void)
 			   if(!(stat1 || stat2 || stat3 || stat4))                  //所有点检测到白线
 			   {
 				   cnt2++;
-				   if(cnt2 > 10 )                  //检测到白线持续White_CNT4次
+				   if(cnt2 > 50 )                  //检测到白线持续White_CNT4次
 				   {
 					   SoundLight_On();              //鸣笛并闪灯
 					   flag_FollowRoute = 0;           //一圈结束
@@ -183,7 +183,7 @@ void Follow_Route(void)
 				if(!(stat1 || stat2 || stat3 || stat4))              //所有点检测到白线
 				{
 					cnt3++;
-					if(cnt3 > 50)                             //检测到白线持续30次（避免车在C点冲出去检测不到黑线）
+					if(cnt3 > 60)                             //检测到白线持续30次（避免车在C点冲出去检测不到黑线）
 					{
 						SoundLight_On();              //鸣笛并闪灯
 						flag_FollowRoute = 3;
@@ -231,7 +231,7 @@ void Follow_Route(void)
 				if(!(stat1 || stat2 || stat3 || stat4))             //所有点检测到白线
 				{
 					cnt3++;
-					if(cnt3 > 50)                      //检测到白线持续50次
+					if(cnt3 > 60)                      //检测到白线持续50次
 					{
 						SoundLight_On();              //鸣笛并闪灯
 						flag_FollowRoute = 1;                     //下一次循环
@@ -282,12 +282,12 @@ void Follow_Route_Tweak(void)
 			cnt_speedup = 0;          //不用加速，重置cnt_speedup
 			if (cnt_slowdown < 400)
 			{
-				SpeedPID.Target = 0.60;
+				SpeedPID.Target = 0.50;
 				cnt_slowdown += 1;
 			}
 			else
 			{
-				SpeedPID.Target = 0.40;      //提前减速
+				SpeedPID.Target = 0.35;      //提前减速
 			}
 			
 			YAWPID.Target = yaw_target;
@@ -299,7 +299,7 @@ void Follow_Route_Tweak(void)
 			cnt_slowdown = 0;          //不用减速，重置cnt_slowdown
 			if (cnt_speedup < 100)
 			{
-				SpeedPID.Target = 0.40;
+				SpeedPID.Target = 0.35;
 				cnt_speedup += 1;
 			}
 			else
@@ -315,12 +315,12 @@ void Follow_Route_Tweak(void)
 			cnt_speedup = 0;
 			if (cnt_slowdown < 400)
 			{
-				SpeedPID.Target = 0.60;
+				SpeedPID.Target = 0.50;
 				cnt_slowdown += 1;
 			}
 			else
 			{
-				SpeedPID.Target = 0.40;      //提前减速
+				SpeedPID.Target = 0.35;      //提前减速
 			}
 			YAWPID.Target = yaw_target;
 			YAW_Tweak();   
@@ -330,7 +330,7 @@ void Follow_Route_Tweak(void)
 			cnt_slowdown = 0;          //不用减速，重置cnt_slowdown
 			if (cnt_speedup < 100)
 			{
-				SpeedPID.Target = 0.40;
+				SpeedPID.Target = 0.35;
 				cnt_speedup += 1;
 			}
 			else
