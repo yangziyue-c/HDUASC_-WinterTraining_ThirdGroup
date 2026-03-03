@@ -3,7 +3,7 @@
 
 #include "zf_common_headfile.h"
 
-#define SoundLight		(C6)
+#define SoundLight		(D4)
 
 void SoundLight_Init(void);
 void SoundLight_On(void);

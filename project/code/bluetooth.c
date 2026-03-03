@@ -4,36 +4,32 @@
 
 extern uint8 RunFlag, Mode, Recorder_Flag, Tracking_Flag;
 
-static fifo_struct bluetooth_fifo;
-
 char BlueSerial_RxPacket[64]; 	//接收数组
 uint8_t BlueSerial_RxFlag;			//接收标志位
 
 /*初始化蓝牙*/
 void Bluetooth_Init (void)
 {
-	fifo_init(&bluetooth_fifo, FIFO_DATA_8BIT, BlueSerial_RxPacket, 64);
-  gpio_init(BLUETOOTH_CH9141_RTS_PIN, GPI, 1, GPI_PULL_UP);
-  uart_init(UART_8, 9600, UART8_TX_D16, UART8_RX_D17);
-  uart_rx_interrupt(UART_8, 1);
+  uart_init(UART_4, 9600, UART4_TX_C16, UART4_RX_C17);
+  uart_rx_interrupt(UART_4, 1);
 }
 
 /*发送字节*/
 void BlueSerial_SendByte(uint8_t Byte)
 {
-	uart_write_byte(UART_8, Byte);
+	uart_write_byte(UART_4, Byte);
 }
 
 /*发送数组*/
 void BlueSerial_SendArray(uint8_t *Array, uint16_t Length)
 {
-	uart_write_buffer (UART_8, Array, Length);
+	uart_write_buffer (UART_4, Array, Length);
 }
 
 /*发送字符串*/
 void BlueSerial_SendString(char *String)
 {
-	uart_write_string (UART_8, String);
+	uart_write_string (UART_4, String);
 }
 
 /*发送数字辅助函数*/
@@ -73,9 +69,9 @@ void uart_rx_interrupt_handler(void)
 {
 	static uint8_t RxState = 0;
 	static uint8_t pRxPacket = 0;
-	if(kLPUART_RxDataRegFullFlag & LPUART_GetStatusFlags(LPUART8))
+	if(kLPUART_RxDataRegFullFlag & LPUART_GetStatusFlags(LPUART4))
 	{
-		uint8_t RxData = uart_read_byte (UART_8);
+		uint8_t RxData = uart_read_byte (UART_4);
 		
 		if (RxState == 0)
 		{
@@ -101,7 +97,7 @@ void uart_rx_interrupt_handler(void)
 		}
 	
 	}
-	LPUART_ClearStatusFlags(LPUART8, kLPUART_RxOverrunFlag);    // 不允许删除
+	LPUART_ClearStatusFlags(LPUART4, kLPUART_RxOverrunFlag);    // 不允许删除
 }
 /*蓝牙更新*/
 void BlueTooth_Update (void)

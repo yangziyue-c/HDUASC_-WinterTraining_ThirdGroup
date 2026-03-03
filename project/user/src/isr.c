@@ -112,10 +112,16 @@ void LPUART4_IRQHandler(void)
 {
     if(kLPUART_RxDataRegFullFlag & LPUART_GetStatusFlags(LPUART4))
     {
-        // 接收中断 
-        flexio_camera_uart_handler();
-        
-        gnss_uart_callback();
+			
+				extern void uart_rx_interrupt_handler();
+		    uart_rx_interrupt_handler();
+        // 接收中断
+        wireless_module_uart_handler();
+			
+//			// 接收中断 
+//        flexio_camera_uart_handler();
+//        
+//        gnss_uart_callback();
     }
         
     LPUART_ClearStatusFlags(LPUART4, kLPUART_RxOverrunFlag);    // 不允许删除
@@ -148,10 +154,10 @@ void LPUART8_IRQHandler(void)
 {
     if(kLPUART_RxDataRegFullFlag & LPUART_GetStatusFlags(LPUART8))
     {
-				extern void uart_rx_interrupt_handler();
-		    uart_rx_interrupt_handler();
-        // 接收中断
-        wireless_module_uart_handler();
+//				extern void uart_rx_interrupt_handler();
+//		    uart_rx_interrupt_handler();
+//        // 接收中断
+//        wireless_module_uart_handler();
         
     }
         

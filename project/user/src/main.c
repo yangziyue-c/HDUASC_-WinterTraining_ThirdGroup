@@ -44,6 +44,8 @@ int main(void)
     PID_Init(&TurnPID);
     PID_Init(&TracePID);
     PID_Init(&YAWPID);
+		
+		SoundLight_On();
 
     while(1)
     {
