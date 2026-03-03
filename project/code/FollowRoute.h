@@ -9,6 +9,7 @@ extern float yaw_target;
 extern uint8_t flag_round; 
 extern uint16 cnt_slowdown;
 extern uint16 cnt_speedup;
+extern uint16_t cnt_FollowLine;
 
 
 

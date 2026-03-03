@@ -65,7 +65,7 @@ int main(void)
         ips200_show_float(0, 232, pitch, 2, 2);
         ips200_show_int(0, 280, flag_FollowRoute, 1);
         
-        BlueSerial_Printf("[plot,%d,%d,%d]", flag_FollowRoute, cnt_slowdown, cnt_speedup);
+        BlueSerial_Printf("[plot,%d,%d,%d,%d]", flag_FollowRoute, cnt_slowdown, cnt_speedup,cnt_FollowLine);
 		
 		// 在主循环显示调试信息
 ips200_show_string(0, 192, "Yaw:");
@@ -119,7 +119,7 @@ void pit_handler(void)
     }
     
     /* 1ms定时中断 */
-    if(pitch > 60 || pitch < -50)
+    if(pitch > 50 || pitch < -50)
     {
         RunFlag = 0;
     }
